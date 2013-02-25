@@ -1,0 +1,50 @@
+
+START 
+	: function_dec START
+	;
+function_dec
+	: type_specifier IDENTIFIER ( parameters ) ';'
+	| type_specifier IDENTIFIER ( parameters )  compound_stmts 
+	;
+parameters
+	: type_specifier IDENTIFIER
+	| type_specifier IDENTIFIER , parameters
+	| epsilon
+	;
+compound_stmts
+	: compound_stmts statement  
+	| { compound_stmts }
+	| epsilon
+	;
+statement 
+	: if_statement
+	| assign_statement ';'
+	;
+if_statement
+	: IF ( expression comparator expression ) compound_stmts ELSE compound_stmts  
+	;
+assign_statement
+	: IDENTIFIER  = expression 
+	| IDENTIFIER = assign_statement
+	;
+dec_statement 
+	: type_specifier IDENTIFIER 
+	;
+expression
+	: expression + F
+	| expression - F
+	;
+F
+	: IDENTIFIER * EXPR
+	| IDENTIFIER / EXPR
+	;
+comparator
+	: < | > | == | <= | >=
+	;
+type_specifier
+	: INT | CHAR | FLOAT | VOID | DOUBLE | CONST | SIGNED | UNSIGNED | STATIC 	 
+	;
+START : B ';' | D B ;
+B : INT IDENTIFIER | ';' START ;
+D : + | epsilon;
+

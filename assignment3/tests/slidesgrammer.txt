@@ -1,0 +1,10 @@
+a+b*c
+
+
+%token IDENTIFIER + *
+%%
+START 	: T EA ;
+T : F TA ;
+F : ( START ) | IDENTIFIER ;
+EA : + T EA | epsilon ;
+TA : * F  TA | epsilon ;

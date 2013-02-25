@@ -1,0 +1,53 @@
+START:	STMT id
+		;
+STMT: STMT ';' EXPR | EXPR
+	;
+EXPR: id '+' EXPR
+	| epsilon
+	;
+*******************************************
+START-> STMT id | 
+STMT-> EXPR NONTERMINALA | 
+NONTERMINALA-> ; EXPR NONTERMINALA | 
+EXPR-> id + EXPR | epsilon | 
+
+printing first sets...
+epsilon: epsilon 
+id: id 
++: + 
+;: ; 
+NONTERMINALA: ; 
+STMT: id epsilon 
+EXPR: id epsilon 
+START: id epsilon 
+
+start $
+stmt id
+nonterminal id
+expr ; 
+
+*******************************************
+START-> T NONTERMINALA | 
+NONTERMINALA-> + T NONTERMINALA | epsilon | 
+T-> F NONTERMINALB | 
+NONTERMINALB-> * F NONTERMINALB | epsilon | 
+F-> ( START ) | int | 
+************************
+printing first sets...
+epsilon: epsilon 
+int: int 
+(: ( 
+NONTERMINALB: * epsilon 
+*: * 
++: + 
+): ) 
+NONTERMINALA: + epsilon 
+T: ( int 
+F: ( int 
+START: ( int 
+**********************
+start $ )
+nonA $ )
+T	+
+nonB +
+F	*

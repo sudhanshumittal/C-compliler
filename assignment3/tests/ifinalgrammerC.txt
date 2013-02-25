@@ -1,0 +1,80 @@
+#include<iostream>
+#include<string>
+void main ( int b , char c){
+	int * b ;  
+   (a) = (10) ;
+	do {
+		(*a) = (a+1) ;
+	}while( a )
+	
+	for((a)  = (0); (a) < (10); a++ ){
+		if( (a) >= (10)) {
+			int c;
+		}
+		else {
+			int d = 2 * 3;
+		}
+	}
+	return ;
+	
+}
+int add ( short a , long b ){
+ return b+ (a ++)  ; 
+} 
+
+#################################################################
+%token  [ ] ( ) . , ; ' " + - * / | % ! & { } = _ : ? \ < > ^ == != <= >=  || && ++ -- ~ -> <<= >>= &= ^= |= += -= *= %= /= << >> IDENTIFIER CONSTANT STRING_LITERAL SIZEOF PTR_OP SIZEOF INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP AND_OP OR_OP TYPE_NAME  TYPEDEF EXTERN STATIC  AUTO  REGISTER CHAR  SHORT  INT  LONG  SIGNED  UNSIGNED  FLOAT DOUBLE CONST VOLATILE  VOID STRUCT UNION  ENUM  CASE  DEFAULT IF  ELSE  SWITCH WHILE  DO FOR GOTO CONTINUE BREAK RETURN INCLUDE
+%%
+START : headers DEC_COMPOUND 
+;
+headers :  headers INCLUDE < IDENTIFIER > 
+| epsilon
+; 
+DEC_COMPOUND :  DEC_COMPOUND DEC
+| epsilon
+;
+DEC : type IDENTIFIER BA
+| type IDENTIFIER ( args ) { STMT } 
+;
+BA :  = EXPR |
+epsilon 
+;
+STMT : EXPR ';' STMT
+| DEC_COMPOUND ';' STMT
+| IF_STMT STMT
+| DO_WHILE ';' STMT
+| FOR ( EXPR ';' EXPR ';' EXPR ) { STMT } STMT
+| epsilon
+| RETURN retval 
+;
+retval : EXPR ';' | ';'
+;
+IF_STMT : IF ( EXPR ) { STMT }β
+
+| IF ( EXPR ) { STMT } ELSE { STMT }
+;
+DO_WHILE : DO { STMT } WHILE ( EXPR ) 
+;
+args : args , type IDENTIFIER
+| type IDENTIFIER
+;
+EXPR :  T EA 
+;
+
+T : F TA ;
+F : ( EXPR ) 
+| ptr IDENTIFIER fix
+| CONSTANT
+| ( EXPR ) RO ( EXPR )
+;
+ptr : * ptr
+| epsilon
+;
+fix : ++ | -- | epsilon ;
+RO : == | = | < | > | <= | >= ;
+EA :  + T EA
+| epsilon ;
+TA : * F TA 
+| epsilon ;
+type : type2 ptr ;
+type2: INT | FLOAT | VOID | CHAR | LONG | SHORT | UNSIGNED | STATIC | CONST | REGISTER | VOLATILE;

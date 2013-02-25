@@ -1,0 +1,71 @@
+START : START ';' STMT
+	| epsilon
+STMT : INT ';' | FLOAT ';' ;
+
+
+###################################
+START :  START decl
+|  epsilon
+;
+
+decl :  type NAME ';'
+|  type NAME [ INT ] ';'
+|  type NAME ( argt ) { body } ';'
+|  type main ( argt ) { body }
+|  header
+;
+
+header :  #include<NAME.h>
+|  #include<NAME>
+;
+argt :  type NAME
+|  epsilon
+;
+body :  vardeclstar stmtstar
+;
+vardeclstar :  vardeclstar decl
+| epsilon
+;
+stmtstar :  stmtstar stmt
+|  epsilon
+;
+stmt :  ifstmt
+| whilestmt
+|  dowhilestmt
+| return expr ';'
+|  return NAME ';'
+|  expr ;
+|  { stmtstar }
+|  ';'
+;
+
+ifstmt :  if ( expr ) stmt
+;
+whilestmt :  while ( expr ) stmt
+;
+dowhilestmt :  do stmt while ( expr ) ';'
+;
+expr :  Term expr'
+;
+expr' :  + expr
+|  - expr
+|  epsilon
+;
+Term :  DIGIT Term'
+;
+Term' :  * Term
+|   / Term
+|   epsilon
+;
+Base :  DIGIT
+|  NAME
+| ( expr )
+;
+Factors' :  !
+|  epsilon
+;
+type :  int
+|  char
+|  float
+| void
+;
